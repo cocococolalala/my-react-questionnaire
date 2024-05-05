@@ -1,0 +1,47 @@
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+
+function App() {
+  const list = [
+    {
+      username: 1,
+      name: "01",
+    },
+    {
+      username: 2,
+      name: "01",
+    },
+    {
+      username: 3,
+      name: "01",
+    },
+  ];
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+        </p>
+        <p>hello world</p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+        <ul>
+          {list.map((user) => {
+            const { username, name } = user;
+            return <li key={username}>{name}</li>
+          })}
+        </ul>
+      </header>
+    </div>
+  );
+}
+
+export default App;

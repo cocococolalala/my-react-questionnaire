@@ -1,59 +1,114 @@
-import React, { FC, useEffect } from "react";
-import "./questionCard.css";
+import React, { FC } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Button, Space, Divider, Tag, Popconfirm, Modal } from "antd";
+import {
+  EditOutlined,
+  LineChartOutlined,
+  StarOutlined,
+  CopyOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined
+} from "@ant-design/icons";
+import styles from "./QuestionCard.module.scss";
 
-//ts自定义类型
 type PropsType = {
-  id: string;
+  _id: string;
   title: string;
   isPublished: boolean;
-  deleteQuestion: (id: string) => void;
-  publishQuestion: (id: string) => void;
+  isStar: boolean;
+  answerCount: number;
+  createAt: string;
 };
+const QuestionCard: FC<PropsType> = (props: PropsType) => {
+  const navigate = useNavigate();
 
-const questionCard: FC<PropsType> = (props) => {
-  const { id, title, isPublished, deleteQuestion, publishQuestion } = props;
+  const { _id, title, createAt, answerCount, isPublished, isStar } = props;
 
-  function edit(id: string) {
-    publishQuestion(id);
+  const { confirm } = Modal;
+
+  function duplicate() {
+    console.log("duplicate");
   }
 
-  function del(id: string) {
-    deleteQuestion(id);
+  function del() {
+    confirm({
+      title:'确定删除该问卷?',
+      icon: <ExclamationCircleOutlined />,
+      onOk: () => alert('删除')
+    })
   }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  // useEffect(() => {
-  //   console.log("questionCard Mounted");
-  //   return () => {
-  //     console.log("questionCard Unmounted", id);
-  //   };
-  // }, []);
-
   return (
-    <div key={id} className="item">
-      <strong>{title}</strong>
-      &nbsp;
-      {isPublished ? (
-        <span style={{ color: "green" }}>已发布</span>
-      ) : (
-        <span style={{ color: "red" }}>未发布</span>
-      )}
-      <button
-        onClick={() => {
-          edit(id);
-        }}
-      >
-        编辑问卷
-      </button>
-      <button
-        onClick={() => {
-          del(id);
-        }}
-      >
-        删除问卷
-      </button>
+    <div className={styles.container}>
+      <div className={styles.title}>
+        <div className={styles.left}>
+          <Link
+            to={isPublished ? `/question/stat/${_id}` : `/question/edit/${_id}`}
+          >
+            <Space>
+              {isStar && <StarOutlined style={{ color: "red" }} />}
+              {title}
+            </Space>
+          </Link>
+        </div>
+        <div className={styles.right}>
+          <Space>
+            {isPublished ? (
+              <Tag color="processing">已发布</Tag>
+            ) : (
+              <Tag>未发布</Tag>
+            )}
+            <span>答卷:{answerCount}</span>
+            <span>{createAt}</span>
+          </Space>
+        </div>
+      </div>
+      <Divider style={{ margin: "12px 0" }} />
+      <div className={styles["button-container"]}>
+        <div className={styles.left}>
+          <Space>
+            <Button
+              icon={<EditOutlined />}
+              type="text"
+              size="small"
+              onClick={() => navigate(`/question/edit/${_id}`)}
+            >
+              编辑问卷
+            </Button>
+            <Button
+              icon={<LineChartOutlined />}
+              type="text"
+              size="small"
+              onClick={() => navigate(`/question/stat/${_id}`)}
+              disabled={isPublished ? false : true}
+            >
+              数据统计
+            </Button>
+          </Space>
+        </div>
+        <div className={styles.right}>
+          <Space>
+            <Button type="text" icon={<StarOutlined />} size="small">
+              {isStar ? "取消标星" : "标星"}
+            </Button>
+            <Popconfirm
+              title="确定复制该问卷?"
+              okText="确定"
+              cancelText="取消"
+              onConfirm={duplicate}
+            >
+              <Button type="text" icon={<CopyOutlined />} size="small">
+                复制
+              </Button>
+            </Popconfirm>
+
+            <Button type="text" icon={<DeleteOutlined />} size="small" onClick={del}>
+              删除
+            </Button>
+          </Space>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default questionCard;
+export default QuestionCard;

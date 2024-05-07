@@ -13,7 +13,7 @@ const Logo: FC = () => {
           <Title>
             <FormOutlined />
           </Title>
-          <Title>小心问卷</Title>
+          <Title>小星问卷</Title>
         </Space>
       </Link>
     </div>

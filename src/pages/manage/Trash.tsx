@@ -3,6 +3,7 @@ import { useTitle } from "ahooks";
 import { Typography, Empty, Table, Tag, Button, Space, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import styles from "./Common.module.scss";
+import ListSearch from "../../components/ListSearch";
 
 const { Title } = Typography;
 const {confirm} = Modal
@@ -33,7 +34,7 @@ const rawQuestionList = [
   },
 ];
 const Trash: FC = () => {
-  useTitle("小心问卷-回收站");
+  useTitle("小星问卷-回收站");
 
   const [questionList, setQuestionList] = useState(rawQuestionList);
 
@@ -106,7 +107,7 @@ const Trash: FC = () => {
         <div className={styles.left}>
           <Title level={3}>回收站</Title>
         </div>
-        <div className={styles.right}>(搜索)</div>
+        <div className={styles.right}><ListSearch /></div>
       </div>
       <div className={styles.content}>
         {questionList.length === 0 && <Empty description="暂无数据" />}

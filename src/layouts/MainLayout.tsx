@@ -1,27 +1,31 @@
-import React,{FC} from "react";
-import {Layout} from 'antd'
-import {Outlet} from 'react-router-dom'
-import styles from './MainLayout.module.scss'
+import React, { FC } from "react";
+import { Layout } from "antd";
+import { Outlet } from "react-router-dom";
+import styles from "./MainLayout.module.scss";
 import Logo from "../components/Logo";
 import UserInfo from "../components/UserInfo";
 
-const { Header, Footer,  Content } = Layout;
+const { Header, Footer, Content } = Layout;
 
 const MainLayout: FC = () => {
   return (
     <Layout>
-    <Header className={styles.header}>
-      <div className={styles.left}><Logo /></div>
-      <div className={styles.right}><UserInfo /></div>
-    </Header>
-    <Content className={styles.main}>
-      <Outlet />
-    </Content>
-    <Footer className={styles.footer}>
-      小心问卷 &copy; 2024 - present. Created by heart
-    </Footer>
+      <Header className={styles.header}>
+        <div className={styles.left}>
+          <Logo />
+        </div>
+        <div className={styles.right}>
+          <UserInfo />
+        </div>
+      </Header>
+      <Content className={styles.main}>
+        <Outlet />
+      </Content>
+      <Footer className={styles.footer}>
+        小星问卷 &copy; 2024 - present. Created by heart
+      </Footer>
     </Layout>
-  )
-}
+  );
+};
 
-export default MainLayout
+export default MainLayout;

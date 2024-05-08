@@ -1,42 +1,20 @@
 import React, { FC, useState } from "react";
 import { useTitle } from "ahooks";
-import { Typography, Empty, Table, Tag, Button, Space, Modal } from "antd";
+import { Typography, Empty, Table, Tag, Button, Space, Modal, Spin } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import styles from "./Common.module.scss";
 import ListSearch from "../../components/ListSearch";
+import { useLoadQuestionListData } from "../../hooks/useLoadQuestionListData";
 
 const { Title } = Typography;
 const {confirm} = Modal
-const rawQuestionList = [
-  {
-    _id: "q1",
-    title: "问卷1",
-    isPublished: true,
-    isStar: true,
-    answerCount: 5,
-    createAt: "3月10日 12:46",
-  },
-  {
-    _id: "q2",
-    title: "问卷2",
-    isPublished: false,
-    isStar: true,
-    answerCount: 4,
-    createAt: "3月10日 12:46",
-  },
-  {
-    _id: "q3",
-    title: "问卷3",
-    isPublished: false,
-    isStar: true,
-    answerCount: 3,
-    createAt: "3月10日 12:46",
-  },
-];
+
 const Trash: FC = () => {
   useTitle("小星问卷-回收站");
 
-  const [questionList, setQuestionList] = useState(rawQuestionList);
+  const { data = {}, loading } = useLoadQuestionListData({isDeleted: true});
+  const { list = [], total = 0 } = data;
+
 
   const tableColumn = [
     {
@@ -87,7 +65,7 @@ const Trash: FC = () => {
       </Space>
     </div>
     <Table
-            dataSource={questionList}
+            dataSource={list}
             columns={tableColumn}
             pagination={false}
             rowKey={(q) => q._id}
@@ -110,8 +88,11 @@ const Trash: FC = () => {
         <div className={styles.right}><ListSearch /></div>
       </div>
       <div className={styles.content}>
-        {questionList.length === 0 && <Empty description="暂无数据" />}
-        {questionList.length > 0 && TableElem}
+      {loading && (<div style={{textAlign: 'center'}}>
+          <Spin></Spin>
+        </div>)}
+        {!loading && list.length === 0 && <Empty description="暂无数据" />}
+        {list.length > 0 && TableElem}
       </div>
       <div className={styles.footer}>分页</div>
     </>

@@ -1,52 +1,20 @@
-import React, { FC, useState } from "react";
-// import { useSearchParams } from "react-router-dom";
+import React, { FC } from "react";
 import { useTitle } from "ahooks";
-import { Typography } from "antd";
+import { Spin, Typography } from "antd";
 import styles from "./Common.module.scss";
 import QuestionCard from "../../components/QuestionCard";
 import ListSearch from "../../components/ListSearch";
-
-const rawQuestionList = [
-  {
-    _id: "q1",
-    title: "问卷1",
-    isPublished: true,
-    isStar: false,
-    answerCount: 5,
-    createAt: "3月10日 12:46",
-  },
-  {
-    _id: "q2",
-    title: "问卷2",
-    isPublished: false,
-    isStar: true,
-    answerCount: 4,
-    createAt: "3月10日 12:46",
-  },
-  {
-    _id: "q3",
-    title: "问卷3",
-    isPublished: false,
-    isStar: false,
-    answerCount: 3,
-    createAt: "3月10日 12:46",
-  },
-  {
-    _id: "q4",
-    title: "问卷4",
-    isPublished: false,
-    isStar: false,
-    answerCount: 6,
-    createAt: "3月10日 12:46",
-  },
-];
+import { useLoadQuestionListData } from "../../hooks/useLoadQuestionListData";
 
 const { Title } = Typography;
 
 const List: FC = () => {
   useTitle("小星问卷-我的问卷");
 
-  const [questionList, setQuestionList] = useState(rawQuestionList);
+  const { data = {}, loading } = useLoadQuestionListData();
+  const { list = [], total = 0 } = data;
+
+ 
 
   return (
     <>
@@ -54,10 +22,15 @@ const List: FC = () => {
         <div className={styles.left}>
           <Title level={3}>我的问卷</Title>
         </div>
-        <div className={styles.right}><ListSearch /></div>
+        <div className={styles.right}>
+          <ListSearch />
+        </div>
       </div>
       <div className={styles.content}>
-        {questionList.map((q) => {
+        {loading && (<div style={{textAlign: 'center'}}>
+          <Spin ></Spin>
+        </div>)}
+        {!loading && list.length > 0 && list.map((q: any) => {
           const { _id } = q;
           return <QuestionCard key={_id} {...q}></QuestionCard>;
         })}
